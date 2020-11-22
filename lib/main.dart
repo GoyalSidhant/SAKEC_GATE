@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'SAKEC GATE',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Color(0xff51a4da),
+        primaryColor: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: StartupScreen(),

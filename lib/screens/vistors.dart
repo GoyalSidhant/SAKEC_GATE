@@ -1,3 +1,4 @@
+import 'package:SAKEC_GATE/screens/addVisitor.dart';
 import 'package:flutter/material.dart';
 import 'package:SAKEC_GATE/global.dart' as global;
 class Vistors extends StatefulWidget {
@@ -10,8 +11,14 @@ class _VistorsState extends State<Vistors> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: global.role == "Security"
-          ? FloatingActionButton(child: new Icon(Icons.add), onPressed: null)
+          ? FloatingActionButton(child: new Icon(Icons.add), onPressed: (){
+            Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddVisitor()),
+                );
+          })
           : SizedBox(),
+
       appBar: AppBar(
         title: Text("vistors"),
       ),
