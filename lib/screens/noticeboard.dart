@@ -1,4 +1,5 @@
 import 'package:SAKEC_GATE/screens/createNotice.dart';
+import 'package:SAKEC_GATE/widgets/drawer.dart';
 import 'package:SAKEC_GATE/widgets/noticecard.dart';
 import 'package:flutter/material.dart';
 import 'package:SAKEC_GATE/global.dart' as global;
@@ -25,6 +26,7 @@ class _NoticeBoardState extends State<NoticeBoard> {
       appBar: AppBar(
         title: Text("Noticeboard"),
       ),
+      drawer: CustomDrawer(),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 30.0),
         
