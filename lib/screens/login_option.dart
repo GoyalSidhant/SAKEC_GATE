@@ -1,9 +1,11 @@
+import 'package:SAKEC_GATE/screens/mobile_verification.dart';
 import 'package:flutter/material.dart';
+import 'package:SAKEC_GATE/global.dart' as global;
 
 class LoginOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var height  = MediaQuery.of(context).size.height; 
+    var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Center(
@@ -22,24 +24,38 @@ class LoginOption extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: Colors.white)),
-                onPressed: () {},
+                onPressed: () {
+                  global.role = "staff" ;
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MobileVerfication("staff"),
+                      ));
+                },
                 color: Colors.transparent,
                 textColor: Colors.white,
                 child:
                     Text("Staff".toUpperCase(), style: TextStyle(fontSize: 30)),
               ),
-            SizedBox(
+              SizedBox(
                 height: 20,
               ),
               RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: Colors.white)),
-                onPressed: () {},
+                onPressed: () {
+                  global.role = "Security" ;
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MobileVerfication("Security"),
+                      ));
+                },
                 color: Colors.transparent,
                 textColor: Colors.white,
-                child:
-                    Text("Security".toUpperCase(), style: TextStyle(fontSize: 30)),
+                child: Text("Security".toUpperCase(),
+                    style: TextStyle(fontSize: 30)),
               ),
             ],
           ),
