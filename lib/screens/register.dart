@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'bottombar.dart';
-
+import 'package:SAKEC_GATE/screens/loading.dart';
+import 'package:SAKEC_GATE/widgets/Database.dart';
+import 'package:SAKEC_GATE/widgets/User.dart';
 class Register extends StatefulWidget {
+  final FirebaseUser user;
+  final String Role;
+  Register({this.user,this.Role});
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -10,9 +15,68 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   bool checked = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
+  User _userFromFirebaseUser(FirebaseUser user) {
+    return (user != null) ? User(uid: user.uid) : null;
+  }
+  Future registerWithEmailAndPassword(
+      String fullName,
+      String email,
+      String password,
+      String mobile) async {
+    try {
+      AuthResult result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      FirebaseUser user = result.user;
+
+      // Create a new document for the user with uid
+      if(widget.Role=='staff'){
+      await DatabaseService(uid: user.uid).updateData(
+          fullName, email, password, mobile);
+      return _userFromFirebaseUser(user);}
+      else{
+        await DatabaseService(uid: user.uid).updateUserData(
+            fullName, email, password, mobile);
+        return _userFromFirebaseUser(user);
+      }
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+  String fullName = '';
+  String email = '';
+  String password = '';
+  String error = '';
+  String DOB = '';
+  String MobileNumber = '';
+  void _onRegister(String MobileNumber) async {
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      await registerWithEmailAndPassword(fullName, email, password,
+          MobileNumber,)
+          .then((result) async {
+        if (result != null) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                  builder: (context) => BottomBar()));
+        } else {
+          setState(() {
+            error = 'Error while registering the user!';
+            _isLoading = false;
+          });
+        }
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _isLoading
+        ? Loading():Scaffold(
       body: Form(
           key: _formKey,
           child: Container(
@@ -40,6 +104,11 @@ class _RegisterState extends State<Register> {
                     SizedBox(height: 20.0),
                     TextFormField(
                       style: TextStyle(color: Colors.white),
+                      onChanged: (val){
+                        setState(() {
+                          fullName=val;
+                        });
+                      },
                       decoration: InputDecoration(
                         labelText: "First Name",
                         contentPadding: EdgeInsets.all(8),
@@ -66,6 +135,11 @@ class _RegisterState extends State<Register> {
                     SizedBox(height: 15.0),
                     TextFormField(
                       style: TextStyle(color: Colors.white),
+                      onChanged: (val){
+                        setState(() {
+                          email=val;
+                        });
+                      },
                       decoration: InputDecoration(
                         labelText: "Email",
                         contentPadding: EdgeInsets.all(8),
@@ -86,6 +160,11 @@ class _RegisterState extends State<Register> {
                     SizedBox(height: 15.0),
                     TextFormField(
                       style: TextStyle(color: Colors.white),
+                      onChanged: (val){
+                        setState(() {
+                          password=val;
+                        });
+                      },
                       decoration: InputDecoration(
                         labelText: "Password",
                         contentPadding: EdgeInsets.all(8),
@@ -177,9 +256,8 @@ class _RegisterState extends State<Register> {
                               style: TextStyle(
                                   color: Colors.blue, fontSize: 16.0)),
                           onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => BottomBar()));
+                            _onRegister(widget.user.phoneNumber);
+
                           }
                           // _onRegister(widget.user.phoneNumber);
                           ),

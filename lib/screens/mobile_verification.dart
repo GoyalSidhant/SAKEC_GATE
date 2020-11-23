@@ -1,6 +1,88 @@
 import 'package:SAKEC_GATE/screens/register.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+final _phoneController = TextEditingController();
+final _codeController = TextEditingController();
+String Role;
+Future registerUser(String mobile, BuildContext context) async {
+  //code
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  _auth.verifyPhoneNumber(
+    phoneNumber: mobile,
+    timeout: Duration(seconds: 60),
+    verificationCompleted: (AuthCredential authCredential) {
+//code for signing in
+      _auth.signInWithCredential(authCredential).then((AuthResult result) {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Register(
+                user: result.user,Role: Role,
+              ),
+            ));
+      }).catchError((String e) {
+        print("error in sign in with cred");
+        print(e);
+      });
+    },
+    verificationFailed: (AuthException authException) {
+      print(authException.message);
+    },
+    codeSent: (String verificationId, [int forceResendingToken]) {
+      //show dialog to take input from the user
+      showDialog<dynamic>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: Text("Enter SMS Code"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextField(
+                  controller: _codeController,
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Done"),
+                textColor: Colors.white,
+                color: Color(0xff51a4da),
+                onPressed: () {
+                  FirebaseAuth auth = FirebaseAuth.instance;
 
+                  String smsCode = _codeController.text.trim();
+
+                  AuthCredential _credential =
+                  PhoneAuthProvider.getCredential(
+                      verificationId: verificationId, smsCode: smsCode);
+                  auth
+                      .signInWithCredential(_credential)
+                      .then((AuthResult result) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Register(
+                            user: result.user,
+                            Role: Role,
+                          ),
+                        ));
+                  }).catchError((String e) {
+                    print("error in singin cred");
+                    print(e);
+                  });
+                },
+              )
+            ],
+          ));
+    },
+    codeAutoRetrievalTimeout: (String verificationId) {
+      verificationId = verificationId;
+      print(verificationId);
+      print("Timout");
+    },
+  );
+}
 class MobileVerfication extends StatefulWidget {
   final String role;
   MobileVerfication(this.role);
@@ -14,6 +96,7 @@ class _MobileVerficationState extends State<MobileVerfication> {
   final _passController = TextEditingController();
 
   double screenHeight, screenWidth;
+
 
   @override
   Widget build(BuildContext context) {
@@ -163,13 +246,9 @@ class _MobileVerficationState extends State<MobileVerfication> {
                             //code for sign in
                             String mobile = _phoneController.text.trim();
                             mobile = "+91" + mobile;
+                            Role=widget.role;
                             print(mobile);
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Register(),
-                                ));
-                            //registerUser(mobile, context);
+                            registerUser(mobile, context);
                           },
                           color: Color(0xff51a4da),
                         ),
