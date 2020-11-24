@@ -1,9 +1,10 @@
+import 'package:SAKEC_GATE/widgets/noticeDialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class NoticeCard extends StatefulWidget {
   final String content;
-  final Timestamp time;
+  final String time;
 
   final String title;
 
@@ -27,7 +28,7 @@ class _NoticeCardState extends State<NoticeCard> {
           ListTile(
             leading: Icon(Icons.rss_feed),
             title: Text("Notice"),
-            subtitle: Text(widget.time.toString()),
+            subtitle: Text(widget.time),
           ),
           ListTile(
               leading: Icon(Icons.message_outlined),
@@ -40,7 +41,19 @@ class _NoticeCardState extends State<NoticeCard> {
               title: Text(
                 widget.undersigned,
                 overflow: TextOverflow.fade,
-              ))
+              )),
+          RaisedButton(
+            child: Text("Read More"),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => NoticeDialog(
+                        title: widget.title,
+                        description: widget.content,
+                        undersigned: widget.undersigned,
+                      ));
+            },
+          )
         ],
       ),
     );

@@ -4,7 +4,7 @@ class Notice{
   String title ;
   String content ; 
   String undersigning ; 
-  Timestamp timestamp ;
+  String timestamp ;
   String noticeID;
 
   Notice({

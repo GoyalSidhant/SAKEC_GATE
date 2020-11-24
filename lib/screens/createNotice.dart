@@ -22,7 +22,7 @@ class _CreateNoticeState extends State<CreateNotice> {
   postNotice() async {
     await noticeCollection.document(noticeID).setData({
       "noticeID": noticeID,
-      "timestamp": timestamp,
+      "timestamp": timestamp.toString(),
       "title": title.text,
       "content": content.text,
       "undersigning": undersign.text

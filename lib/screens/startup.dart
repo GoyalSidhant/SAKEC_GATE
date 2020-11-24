@@ -51,8 +51,8 @@ class _StartupScreenState extends State<StartupScreen> {
             Center(
               child: Image.asset(
                 'assets/logo.png',
-                height: 300,
-                width: 300,
+                height: 250,
+                width: 250,
               ),
             ),
             Text("SAKEC GATE",
