@@ -1,6 +1,6 @@
 import 'package:SAKEC_GATE/screens/login_option.dart';
 import 'package:flutter/material.dart';
-
+import 'package:SAKEC_GATE/global.dart' as global;
 class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class CustomDrawer extends StatelessWidget {
                         )),
                     SizedBox(height: 10),
                     Text(
-                      "Name",
+                      global.name,
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
                   ],

@@ -1,6 +1,10 @@
-import 'package:SAKEC_GATE/screens/vistors.dart';
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
+import 'package:SAKEC_GATE/models/user.dart';
+import 'package:SAKEC_GATE/screens/vistors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:SAKEC_GATE/global.dart' as global;
 import 'noticeboard.dart';
 
 class BottomBar extends StatefulWidget {
@@ -16,11 +20,63 @@ class _BottomBarState extends State<BottomBar> {
     NoticeBoard(),
     Vistors(),
   ];
+  List<UserFirebase> users = [];
+  List<UserFirebase> staffs = [];
+
+  final CollectionReference securityCollection =
+      Firestore.instance.collection('security');
+  final CollectionReference staffCollection =
+      Firestore.instance.collection('staff');
+  UserFirebase curruser;
+
+  getStaffdetials() async {
+    QuerySnapshot staff = await staffCollection.getDocuments();
+    print(staff.documents[0].data.toString());
+    setState(() {
+      staffs =
+          staff.documents.map((doc) => UserFirebase.fromDocument(doc)).toList();
+    });
+    global.staff = staffs;
+    List<UserFirebase> data =
+        staffs.where((row) => (row.email.contains(global.email))).toList();
+    curruser = data[0];
+
+    global.name = curruser.fullName;
+  }
+
+  getSecDetials() async {
+    QuerySnapshot sec = await securityCollection.getDocuments();
+    print(sec.documents[0].data.toString());
+    setState(() {
+      users =
+          sec.documents.map((doc) => UserFirebase.fromDocument(doc)).toList();
+    });
+    QuerySnapshot staff = await staffCollection.getDocuments();
+    print(staff.documents[0].data.toString());
+    setState(() {
+      staffs =
+          staff.documents.map((doc) => UserFirebase.fromDocument(doc)).toList();
+    });
+    global.staff = staffs;
+    List<UserFirebase> data =
+        users.where((row) => (row.email.contains(global.email))).toList();
+    curruser = data[0];
+
+    global.name = curruser.fullName;
+    log(global.staff.toString());
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    global.role == "staff" ? getStaffdetials() : getSecDetials();
   }
 
   @override

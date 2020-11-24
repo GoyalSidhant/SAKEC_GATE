@@ -1,6 +1,6 @@
 import 'package:SAKEC_GATE/models/visitor.dart';
 import 'package:flutter/material.dart';
-
+import 'package:SAKEC_GATE/global.dart' as global; 
 class VistorCard extends StatefulWidget {
   final String name;
   final String staff;
@@ -50,7 +50,11 @@ class _VistorCardState extends State<VistorCard> {
               title: Text(
                 widget.purpose,
                 overflow: TextOverflow.fade,
-              ))
+              )),
+              IconButton(
+                icon: global.role == "staff" ? Icon(Icons.check , color: Colors.green,): Icon(Icons.phone , color: Colors.red,), 
+                onPressed: (){}
+                )
         ],
       ),
     );

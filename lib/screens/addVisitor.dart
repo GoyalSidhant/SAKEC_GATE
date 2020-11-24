@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:SAKEC_GATE/global.dart' as global;
 
 class AddVisitor extends StatefulWidget {
   @override
@@ -66,6 +67,8 @@ class _AddVisitorState extends State<AddVisitor>
       },
     );
   }
+
+  String dropDown = "whom to meet";
 
   Container buildSplashScreen() {
     return Container(
@@ -241,7 +244,23 @@ class _AddVisitorState extends State<AddVisitor>
             ),
           ),
           SizedBox(height: 15),
-          TextFormField(
+          DropdownButton(
+            //value: global.staff[0].fullName, 
+              items: global.staff.map<DropdownMenuItem<String>>((value) {
+                return DropdownMenuItem<String>(
+                  value: value.fullName,
+                  child: Text(value.fullName),
+                );
+              }).toList(),
+              onChanged: (String newValue) {
+                setState(() {
+                  staff.text = newValue;
+                });
+              },
+              iconSize: 24,
+              elevation: 16,
+              icon: Icon(Icons.arrow_downward)),
+          /* TextFormField(
             //style: TextStyle(color: Colors.white),
             controller: staff,
             decoration: InputDecoration(
@@ -252,7 +271,7 @@ class _AddVisitorState extends State<AddVisitor>
                 borderRadius: BorderRadius.circular(10.0),
               ),
             ),
-          ),
+          ), */
           SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
