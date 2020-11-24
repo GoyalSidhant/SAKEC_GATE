@@ -186,7 +186,7 @@ class _AddVisitorState extends State<AddVisitor>
         children: <Widget>[
           isUploading ? linearProgress() : Text(""),
           CircleAvatar(
-            radius: 60,
+            radius: 100,
             child: file != null
                 ? Center(
                     child: Container(

@@ -4,6 +4,7 @@ import 'bottombar.dart';
 import 'package:SAKEC_GATE/screens/loading.dart';
 import 'package:SAKEC_GATE/widgets/Database.dart';
 import 'package:SAKEC_GATE/widgets/User.dart';
+import 'package:SAKEC_GATE/global.dart' as global;
 class Register extends StatefulWidget {
   final FirebaseUser user;
   final String Role;
@@ -107,6 +108,7 @@ class _RegisterState extends State<Register> {
                       onChanged: (val){
                         setState(() {
                           fullName=val;
+                          global.name = fullName  ; 
                         });
                       },
                       decoration: InputDecoration(

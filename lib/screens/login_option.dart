@@ -1,3 +1,4 @@
+import 'package:SAKEC_GATE/screens/bottombar.dart';
 import 'package:SAKEC_GATE/screens/mobile_verification.dart';
 import 'package:flutter/material.dart';
 import 'package:SAKEC_GATE/global.dart' as global;
@@ -29,6 +30,7 @@ class LoginOption extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
+                        //builder: (context) => BottomBar()
                         builder: (context) => MobileVerfication("staff"),
                       ));
                 },
@@ -49,6 +51,7 @@ class LoginOption extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
+                         //builder: (context) => BottomBar()
                         builder: (context) => MobileVerfication("Security"),
                       ));
                 },

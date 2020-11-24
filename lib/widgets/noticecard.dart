@@ -27,7 +27,7 @@ class _NoticeCardState extends State<NoticeCard> {
           ListTile(
             leading: Icon(Icons.rss_feed),
             title: Text("Notice"),
-            subtitle: Text(widget.time.toDate().toString()),
+            subtitle: Text(widget.time.toString()),
           ),
           ListTile(
               leading: Icon(Icons.message_outlined),

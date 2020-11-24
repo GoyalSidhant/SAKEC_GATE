@@ -21,7 +21,21 @@ class _VistorCardState extends State<VistorCard> {
       child: Column(
         children: [
           ListTile(
-            leading: Icon(Icons.person),
+            leading: Container(
+                  child: new Image.network( widget.mediaurl,
+                    fit: BoxFit.cover,
+                    loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+  if (loadingProgress == null) return child;
+    return Center(
+      child: CircularProgressIndicator(
+      value: loadingProgress.expectedTotalBytes != null ? 
+             loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+             : null,
+      ),
+    );
+  },
+                  ),
+                ),
             title: Text(widget.name),
             //trailing: Text("12:42 PM"),
           ),
