@@ -108,7 +108,7 @@ class _AddVisitorState extends State<AddVisitor> with AutomaticKeepAliveClientMi
     final tempDir = await getTemporaryDirectory();
     final path = tempDir.path;
     Im.Image imageFile = Im.decodeImage(file.readAsBytesSync());
-    final compressedImageFile = File('$path/img_$postId.jpg')
+    final compressedImageFile = File('$path/img_$visitorID.jpg')
       ..writeAsBytesSync(Im.encodeJpg(imageFile, quality: 85));
     setState(() {
       file = compressedImageFile;
