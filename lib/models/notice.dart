@@ -5,6 +5,7 @@ class Notice{
   String content ; 
   String undersigning ; 
   Timestamp timestamp ;
+  String noticeID;
 
   Notice({
     this.content,

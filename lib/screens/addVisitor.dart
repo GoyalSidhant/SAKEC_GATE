@@ -12,21 +12,18 @@ class AddVisitor extends StatefulWidget {
   _AddVisitorState createState() => _AddVisitorState();
 }
 
-class _AddVisitorState extends State<AddVisitor> with AutomaticKeepAliveClientMixin<AddVisitor> {
+class _AddVisitorState extends State<AddVisitor>
+    with AutomaticKeepAliveClientMixin<AddVisitor> {
   File file;
   bool isUploading = false;
   String visitorID = Uuid().v4();
   final DateTime timestamp = DateTime.now();
-  final CollectionReference visitorCollection = Firestore.instance.collection('visitors');
+  final CollectionReference visitorCollection =
+      Firestore.instance.collection('visitors');
   TextEditingController name = TextEditingController();
-    TextEditingController phone = TextEditingController();
-      TextEditingController purpose = TextEditingController();
-        TextEditingController staff = TextEditingController();
-
-
-
-
-
+  TextEditingController phone = TextEditingController();
+  TextEditingController purpose = TextEditingController();
+  TextEditingController staff = TextEditingController();
 
   handleTakePhoto() async {
     Navigator.pop(context);
@@ -116,24 +113,27 @@ class _AddVisitorState extends State<AddVisitor> with AutomaticKeepAliveClientMi
   }
 
   Future<String> uploadImage(imageFile) async {
-    StorageUploadTask uploadTask = FirebaseStorage().ref().child("post_$visitorID.jpg").putFile(imageFile);
+    StorageUploadTask uploadTask =
+        FirebaseStorage().ref().child("post_$visitorID.jpg").putFile(imageFile);
     StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
     String downloadUrl = await storageSnap.ref.getDownloadURL();
     return downloadUrl;
   }
 
   createVisitorInFirestore(
-      {String mediaUrl, String name, String phone , String purpose , String staff }) {
-    visitorCollection
-        .document(visitorID)
-        .setData({
+      {String mediaUrl,
+      String name,
+      String phone,
+      String purpose,
+      String staff}) {
+    visitorCollection.document(visitorID).setData({
       "visitorID": visitorID,
       "mediaURL": mediaUrl,
-      "name":name ,
-      "phone":phone,
-      "purpose": purpose ,
-      "staff":staff,
-      "timestamp":timestamp,
+      "name": name,
+      "phone": phone,
+      "purpose": purpose,
+      "staff": staff,
+      "timestamp": timestamp,
     });
   }
 
@@ -144,12 +144,11 @@ class _AddVisitorState extends State<AddVisitor> with AutomaticKeepAliveClientMi
     await compressImage();
     String mediaUrl = await uploadImage(file);
     createVisitorInFirestore(
-      mediaUrl: mediaUrl,
-      name: name.text,
-      phone: phone.text,
-      purpose: purpose.text,
-      staff: staff.text
-    );
+        mediaUrl: mediaUrl,
+        name: name.text,
+        phone: phone.text,
+        purpose: purpose.text,
+        staff: staff.text);
     setState(() {
       file = null;
       isUploading = false;
@@ -188,16 +187,18 @@ class _AddVisitorState extends State<AddVisitor> with AutomaticKeepAliveClientMi
           isUploading ? linearProgress() : Text(""),
           CircleAvatar(
             radius: 60,
-            child: file != null ? Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: FileImage(file),
-                  ),
-                ),
-              ),
-            ): Icon(Icons.person_add),
+            child: file != null
+                ? Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: FileImage(file),
+                        ),
+                      ),
+                    ),
+                  )
+                : Icon(Icons.person_add),
           ),
           SizedBox(height: 15),
           SizedBox(height: 20),
@@ -263,9 +264,7 @@ class _AddVisitorState extends State<AddVisitor> with AutomaticKeepAliveClientMi
                     borderRadius: BorderRadius.circular(30.0)),
                 child: Text('Add Vistors',
                     style: TextStyle(color: Colors.white, fontSize: 16.0)),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                }
+                onPressed: isUploading ? null : () => handleSubmit()
                 // _onRegister(widget.user.phoneNumber);
                 ),
           )
