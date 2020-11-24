@@ -1,3 +1,4 @@
+import 'package:SAKEC_GATE/screens/login.dart';
 import 'package:SAKEC_GATE/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -266,11 +267,11 @@ class _MobileVerficationState extends State<MobileVerfication> {
                                   fontWeight: FontWeight.w700),
                             ),
                             onTap: () {
-                              /* Navigator.push(
+                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => LoginScreen()),
-                              ); */
+                              );
                             },
                           )
                         ],
