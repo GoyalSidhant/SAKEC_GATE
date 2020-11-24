@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image/image.dart' as Im;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,11 +12,21 @@ class AddVisitor extends StatefulWidget {
   _AddVisitorState createState() => _AddVisitorState();
 }
 
-class _AddVisitorState extends State<AddVisitor> {
+class _AddVisitorState extends State<AddVisitor> with AutomaticKeepAliveClientMixin<AddVisitor> {
   File file;
   bool isUploading = false;
-  String postId = Uuid().v4();
+  String visitorID = Uuid().v4();
   final DateTime timestamp = DateTime.now();
+  final CollectionReference visitorCollection = Firestore.instance.collection('visitors');
+  TextEditingController name = TextEditingController();
+    TextEditingController phone = TextEditingController();
+      TextEditingController purpose = TextEditingController();
+        TextEditingController staff = TextEditingController();
+
+
+
+
+
 
   handleTakePhoto() async {
     Navigator.pop(context);
@@ -58,7 +70,7 @@ class _AddVisitorState extends State<AddVisitor> {
     );
   }
 
-  /* Container buildSplashScreen() {
+  Container buildSplashScreen() {
     return Container(
       color: Theme.of(context).accentColor.withOpacity(0.6),
       child: Column(
@@ -84,7 +96,7 @@ class _AddVisitorState extends State<AddVisitor> {
         ],
       ),
     );
-  } */
+  }
 
   clearImage() {
     setState(() {
@@ -103,45 +115,45 @@ class _AddVisitorState extends State<AddVisitor> {
     });
   }
 
-  /* Future<String> uploadImage(imageFile) async {
-    StorageUploadTask uploadTask = FirebaseStorage().ref().child("post_$postId.jpg").putFile(imageFile);
+  Future<String> uploadImage(imageFile) async {
+    StorageUploadTask uploadTask = FirebaseStorage().ref().child("post_$visitorID.jpg").putFile(imageFile);
     StorageTaskSnapshot storageSnap = await uploadTask.onComplete;
     String downloadUrl = await storageSnap.ref.getDownloadURL();
     return downloadUrl;
-  } */
+  }
 
-  /* createPostInFirestore(
-      {String mediaUrl, String location, String description}) {
-    postsRef
-        .document(postId)
+  createVisitorInFirestore(
+      {String mediaUrl, String name, String phone , String purpose , String staff }) {
+    visitorCollection
+        .document(visitorID)
         .setData({
-      "postId": postId,
-      "ownerId": "${global.name}-$postId",
-      "mediaUrl": mediaUrl,
-      "description": description,
-      "timestamp": timestamp,
-      "likes": {},
-      "username": global.name
+      "visitorID": visitorID,
+      "mediaURL": mediaUrl,
+      "name":name ,
+      "phone":phone,
+      "purpose": purpose ,
+      "staff":staff,
+      "timestamp":timestamp,
     });
-  } */
+  }
 
   handleSubmit() async {
     setState(() {
       isUploading = true;
     });
     await compressImage();
-    /* String mediaUrl = await uploadImage(file);
-    createPostInFirestore(
+    String mediaUrl = await uploadImage(file);
+    createVisitorInFirestore(
       mediaUrl: mediaUrl,
-      location: locationController.text,
-      description: captionController.text,
-    ); */
-    //captionController.clear();
-    //locationController.clear();
+      name: name.text,
+      phone: phone.text,
+      purpose: purpose.text,
+      staff: staff.text
+    );
     setState(() {
       file = null;
       isUploading = false;
-      postId = Uuid().v4();
+      visitorID = Uuid().v4();
     });
   }
 
@@ -188,23 +200,10 @@ class _AddVisitorState extends State<AddVisitor> {
             ): Icon(Icons.person_add),
           ),
           SizedBox(height: 15),
-          SizedBox(
-            //width: 10,
-            height: 50.0,
-            child: RaisedButton(
-                elevation: 0.0,
-                color: Colors.blue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-                child: Text('Add Image',
-                    style: TextStyle(color: Colors.white, fontSize: 16.0)),
-                onPressed: () => selectImage(context),
-                // _onRegister(widget.user.phoneNumber);
-                ),
-          ),
           SizedBox(height: 20),
           TextFormField(
             //style: TextStyle(color: Colors.white),
+            controller: name,
             decoration: InputDecoration(
               labelText: "Name",
               contentPadding: EdgeInsets.all(8),
@@ -217,6 +216,7 @@ class _AddVisitorState extends State<AddVisitor> {
           SizedBox(height: 15),
           TextFormField(
             //style: TextStyle(color: Colors.white),
+            controller: phone,
             decoration: InputDecoration(
               labelText: "Phone Number",
               contentPadding: EdgeInsets.all(8),
@@ -229,6 +229,7 @@ class _AddVisitorState extends State<AddVisitor> {
           SizedBox(height: 15),
           TextFormField(
             //style: TextStyle(color: Colors.white),
+            controller: purpose,
             decoration: InputDecoration(
               labelText: "Purpose to Visit",
               contentPadding: EdgeInsets.all(8),
@@ -241,6 +242,7 @@ class _AddVisitorState extends State<AddVisitor> {
           SizedBox(height: 15),
           TextFormField(
             //style: TextStyle(color: Colors.white),
+            controller: staff,
             decoration: InputDecoration(
               labelText: "Whom to meet",
               contentPadding: EdgeInsets.all(8),
@@ -281,8 +283,12 @@ class _AddVisitorState extends State<AddVisitor> {
     );
   }
 
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
-    return buildUploadForm();
+    super.build(context);
+
+    return file == null ? buildSplashScreen() : buildUploadForm();
   }
 }
