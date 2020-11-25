@@ -25,13 +25,14 @@ class DatabaseService {
   }
 
   Future updateData(String fullName, String email, String password,
-      String MobileNumber) async {
+      String MobileNumber,String Token) async {
     return await staffCollection.document(uid).setData({
       'fullName': fullName,
       'email': email,
       'password': password,
       'MobileNumber': MobileNumber,
       'JoinDate': getCurrentDate(),
+      'FCM':Token,
     });
   }
 }

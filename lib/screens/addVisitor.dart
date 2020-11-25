@@ -25,7 +25,7 @@ class _AddVisitorState extends State<AddVisitor>
   TextEditingController phone = TextEditingController();
   TextEditingController purpose = TextEditingController();
   TextEditingController staff = TextEditingController();
-
+String ID;
   handleTakePhoto() async {
     Navigator.pop(context);
     File file = await ImagePicker.pickImage(
@@ -123,12 +123,14 @@ class _AddVisitorState extends State<AddVisitor>
     return downloadUrl;
   }
 
-  createVisitorInFirestore(
+  void createVisitorInFirestore(
       {String mediaUrl,
       String name,
       String phone,
       String purpose,
-      String staff}) {
+      String staff,
+        String ID,
+      }) {
     visitorCollection.document(visitorID).setData({
       "visitorID": visitorID,
       "mediaURL": mediaUrl,
@@ -137,10 +139,11 @@ class _AddVisitorState extends State<AddVisitor>
       "purpose": purpose,
       "staff": staff,
       "timestamp": timestamp,
+      "ID":ID,
     });
   }
 
-  handleSubmit() async {
+ void  handleSubmit() async {
     setState(() {
       isUploading = true;
     });
@@ -151,7 +154,9 @@ class _AddVisitorState extends State<AddVisitor>
         name: name.text,
         phone: phone.text,
         purpose: purpose.text,
-        staff: staff.text);
+        staff: staff.text,
+      ID: ID,
+    );
     setState(() {
       file = null;
       isUploading = false;
@@ -245,16 +250,18 @@ class _AddVisitorState extends State<AddVisitor>
           ),
           SizedBox(height: 15),
           DropdownButton(
-            //value: global.staff[0].fullName, 
-              items: global.staff.map<DropdownMenuItem<String>>((value) {
+            //value: global.staff[0].fullName,
+              items: global.doc.map<DropdownMenuItem<String>>((value) {
                 return DropdownMenuItem<String>(
-                  value: value.fullName,
-                  child: Text(value.fullName),
+                  value: value,
+                  child: Text(value.split('_')[0]),
                 );
               }).toList(),
               onChanged: (String newValue) {
                 setState(() {
-                  staff.text = newValue;
+                  print(newValue);
+                  staff.text = newValue.split('_')[0];
+                  ID=newValue.split('_')[1];
                 });
               },
               iconSize: 24,

@@ -22,6 +22,7 @@ class _BottomBarState extends State<BottomBar> {
   ];
   List<UserFirebase> users = [];
   List<UserFirebase> staffs = [];
+  List<String>docum=[];
 
   final CollectionReference securityCollection =
       Firestore.instance.collection('security');
@@ -29,13 +30,27 @@ class _BottomBarState extends State<BottomBar> {
       Firestore.instance.collection('staff');
   UserFirebase curruser;
 
-  getStaffdetials() async {
+ void  getStaffdetials() async {
     QuerySnapshot staff = await staffCollection.getDocuments();
+    print("Staff Details");
     print(staff.documents[0].data.toString());
     setState(() {
       staffs =
           staff.documents.map((doc) => UserFirebase.fromDocument(doc)).toList();
     });
+    staff.documents.forEach((result) {
+      setState(() {
+        print(result.data['fullName']);
+        String s=result.data['fullName'].toString()+'_'+result.documentID;
+        docum.add(s);
+      });
+    });
+    global.doc=docum;
+
+
+
+
+
     global.staff = staffs;
     List<UserFirebase> data =
         staffs.where((row) => (row.email.contains(global.email))).toList();
@@ -44,7 +59,7 @@ class _BottomBarState extends State<BottomBar> {
     global.name = curruser.fullName;
   }
 
-  getSecDetials() async {
+   void getSecDetials() async {
     QuerySnapshot sec = await securityCollection.getDocuments();
     print(sec.documents[0].data.toString());
     setState(() {
@@ -57,6 +72,15 @@ class _BottomBarState extends State<BottomBar> {
       staffs =
           staff.documents.map((doc) => UserFirebase.fromDocument(doc)).toList();
     });
+    staff.documents.forEach((result) {
+      setState(() {
+        print(result.data['fullName']);
+        String s=result.data['fullName'].toString()+'_'+result.documentID;
+        print(s);
+        docum.add(s);
+      });
+    });
+    global.doc=docum;
     global.staff = staffs;
     List<UserFirebase> data =
         users.where((row) => (row.email.contains(global.email))).toList();

@@ -16,7 +16,7 @@ class _StaffvisitorListState extends State<StaffvisitorList> {
       Firestore.instance.collection('visitors');
   List<Visitor> visitors = [];
   List<Visitor> test = [] ; 
-   getVisitor() async {
+   void getVisitor() async {
     QuerySnapshot snapshot = await visitorCollection.getDocuments();
     print(snapshot.documents[0].data.toString());
     setState(() {
@@ -31,6 +31,7 @@ class _StaffvisitorListState extends State<StaffvisitorList> {
   @override
   void initState() {
     super.initState();
+    print('In Staff Visit');
     getVisitor();
   }
 

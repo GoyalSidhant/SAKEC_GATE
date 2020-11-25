@@ -5,6 +5,7 @@ import 'package:SAKEC_GATE/screens/loading.dart';
 import 'package:SAKEC_GATE/widgets/Database.dart';
 import 'package:SAKEC_GATE/widgets/User.dart';
 import 'package:SAKEC_GATE/global.dart' as global;
+import 'package:firebase_messaging/firebase_messaging.dart';
 class Register extends StatefulWidget {
   final FirebaseUser user;
   final String Role;
@@ -21,11 +22,22 @@ class _RegisterState extends State<Register> {
   User _userFromFirebaseUser(FirebaseUser user) {
     return (user != null) ? User(uid: user.uid) : null;
   }
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String Token='';
+  Future<void> _register () async{
+    await _firebaseMessaging.getToken().then((token) {print(token);
+    setState(() {
+      Token=token;
+    });
+    }
+    );
+  }
   Future registerWithEmailAndPassword(
       String fullName,
       String email,
       String password,
-      String mobile) async {
+      String mobile,
+      String Token) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -34,7 +46,7 @@ class _RegisterState extends State<Register> {
       // Create a new document for the user with uid
       if(widget.Role=='staff'){
       await DatabaseService(uid: user.uid).updateData(
-          fullName, email, password, mobile);
+          fullName, email, password, mobile,Token);
       return _userFromFirebaseUser(user);}
       else{
         await DatabaseService(uid: user.uid).updateUserData(
@@ -59,7 +71,7 @@ class _RegisterState extends State<Register> {
       });
 
       await registerWithEmailAndPassword(fullName, email, password,
-          MobileNumber,)
+          MobileNumber,Token)
           .then((result) async {
         if (result != null) {
           Navigator.of(context).pushReplacement(
@@ -257,9 +269,9 @@ class _RegisterState extends State<Register> {
                           child: Text('Register',
                               style: TextStyle(
                                   color: Colors.blue, fontSize: 16.0)),
-                          onPressed: () {
+                          onPressed: ()async {
+                            await _register();
                             _onRegister(widget.user.phoneNumber);
-
                           }
                           // _onRegister(widget.user.phoneNumber);
                           ),
