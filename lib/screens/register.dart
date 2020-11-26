@@ -277,13 +277,13 @@ class _RegisterState extends State<Register> {
                           ),
                     ),
                     SizedBox(height: 10.0),
-                    Text.rich(
+                    /* Text.rich(
                       TextSpan(
                         text: "Already have an account? ",
                         style: TextStyle(color: Colors.white, fontSize: 14.0),
                         children: <TextSpan>[
                           TextSpan(
-                            text: 'Sign In',
+                            text: 'Login',
                             style: TextStyle(
                                 color: Colors.white,
                                 decoration: TextDecoration.underline),
@@ -293,7 +293,7 @@ class _RegisterState extends State<Register> {
                           ),
                         ],
                       ),
-                    ),
+                    ), */
                     SizedBox(height: 10.0),
                   ],
                 ),
