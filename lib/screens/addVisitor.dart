@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:SAKEC_GATE/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image/image.dart' as Im;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:uuid/uuid.dart';
 import 'package:SAKEC_GATE/global.dart' as global;
 
@@ -25,7 +27,7 @@ class _AddVisitorState extends State<AddVisitor>
   TextEditingController phone = TextEditingController();
   TextEditingController purpose = TextEditingController();
   TextEditingController staff = TextEditingController();
-String ID;
+  String ID;
   handleTakePhoto() async {
     Navigator.pop(context);
     File file = await ImagePicker.pickImage(
@@ -129,8 +131,8 @@ String ID;
       String phone,
       String purpose,
       String staff,
-        String ID,
-      }) {
+      String ID,
+      String staffMobile}) {
     visitorCollection.document(visitorID).setData({
       "visitorID": visitorID,
       "mediaURL": mediaUrl,
@@ -139,29 +141,35 @@ String ID;
       "purpose": purpose,
       "staff": staff,
       "timestamp": timestamp,
-      "ID":ID,
+      "ID": ID,
+      "staffMobile": staffMobile
     });
   }
 
- void  handleSubmit() async {
+  void handleSubmit() async {
     setState(() {
       isUploading = true;
     });
     await compressImage();
     String mediaUrl = await uploadImage(file);
+    List<UserFirebase> s = global.staff
+        .where((row) => (row.fullName.contains(staff.text)))
+        .toList();
+    String staffmob = s[0].MobileNumber;
     createVisitorInFirestore(
         mediaUrl: mediaUrl,
         name: name.text,
         phone: phone.text,
         purpose: purpose.text,
         staff: staff.text,
-      ID: ID,
-    );
+        ID: ID,
+        staffMobile: staffmob);
     setState(() {
       file = null;
       isUploading = false;
       visitorID = Uuid().v4();
     });
+    Navigator.pop(context);
   }
 
   Scaffold buildUploadForm() {
@@ -249,8 +257,8 @@ String ID;
             ),
           ),
           SizedBox(height: 15),
-          DropdownButton(
-            //value: global.staff[0].fullName,
+          SearchableDropdown.single(
+              //value: global.staff[0].fullName,
               items: global.doc.map<DropdownMenuItem<String>>((value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -261,11 +269,16 @@ String ID;
                 setState(() {
                   print(newValue);
                   staff.text = newValue.split('_')[0];
-                  ID=newValue.split('_')[1];
+                  ID = newValue.split('_')[1];
                 });
               },
               iconSize: 24,
-              elevation: 16,
+              hint: Text('Please Select whom to meet'),
+              isExpanded: true,
+              searchHint: new Text(
+                'Select ',
+                style: new TextStyle(fontSize: 20),
+              ),
               icon: Icon(Icons.arrow_downward)),
           /* TextFormField(
             //style: TextStyle(color: Colors.white),

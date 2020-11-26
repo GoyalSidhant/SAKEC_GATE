@@ -21,12 +21,24 @@ class LoginOption extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 70.0,
+                // maxRadius: 66.0,
+                child: Center(
+                  child: Image.asset(
+                    'assets/staff.png',
+                    height: 100,
+                    width: 100,
+                  ),
+                ),
+              ),
               RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: Colors.white)),
                 onPressed: () {
-                  global.role = "staff" ;
+                  global.role = "staff";
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -42,16 +54,28 @@ class LoginOption extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 70.0,
+                // maxRadius: 66.0,
+                child: Center(
+                  child: Image.asset(
+                    'assets/sec1.png',
+                    height: 100,
+                    width: 100,
+                  ),
+                ),
+              ),
               RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: Colors.white)),
                 onPressed: () {
-                  global.role = "Security" ;
+                  global.role = "Security";
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                         //builder: (context) => BottomBar()
+                        //builder: (context) => BottomBar()
                         builder: (context) => MobileVerfication("Security"),
                       ));
                 },
