@@ -52,7 +52,7 @@ class LoginOption extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                          //builder: (context) => BottomBar()
-                        builder: (context) => MobileVerfication("Security"),
+                        builder: (context) => MobileVerfication("security"),
                       ));
                 },
                 color: Colors.transparent,

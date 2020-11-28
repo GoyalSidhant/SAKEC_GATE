@@ -35,6 +35,11 @@ class DatabaseService {
       'FCM':Token,
     });
   }
+  Future<QuerySnapshot> getUserData(String email,String Role) async {
+    QuerySnapshot snapshot = await Firestore.instance.collection(Role).where('email', isEqualTo: email).getDocuments();
+    //print(snapshot.documents[0].data);
+    return snapshot;
+  }
 }
 
 String getCurrentDate() {

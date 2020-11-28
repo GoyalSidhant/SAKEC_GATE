@@ -8,8 +8,11 @@ import 'package:SAKEC_GATE/screens/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:SAKEC_GATE/widgets/auth_service.dart';
 import 'package:SAKEC_GATE/global.dart' as global;
+import 'package:SAKEC_GATE/widgets/Database.dart';
 
 class LoginScreen extends StatefulWidget {
+  String Role;
+  LoginScreen({this.Role});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -35,8 +38,32 @@ class _LoginScreenState extends State<LoginScreen> {
           .signInWithEmailAndPassword(email.text, password.text)
           .then((result) async {
         if (result != null) {
-          // QuerySnapshot userInfoSnapshot = await DatabaseService().getUserData(email.text);
-          // print(userInfoSnapshot.documents[0].data);
+          print(widget.Role);
+          try{QuerySnapshot userInfoSnapshot = await DatabaseService().getUserData(email.text,widget.Role);
+          print('USER INF');
+          print(userInfoSnapshot.documents);
+          if(userInfoSnapshot.documents.length==0){
+            setState(() {
+              error = 'Error signing in!';
+              _isloading = false;
+            });
+          }
+          else{
+          setState(() {
+            _isloading = false;
+          });
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => BottomBar()),
+                  (Route<dynamic> route) => false);}}
+          catch(e){
+            setState(() {
+              error = 'Error signing in!';
+              _isloading = false;
+            });
+          }
+          //print("USER INFO");
+          //print(userInfoSnapshot.documents[0].data);
+
           // await HelperFunctions.saveUserLoggedInSharedPreference(true);
           // await HelperFunctions.saveUserEmailSharedPreference(email.text);
           // await HelperFunctions.saveUserNameSharedPreference(
@@ -53,12 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // await HelperFunctions.getUserNameSharedPreference().then((value) {
           //   print("Full Name: $value");
           // });
-          setState(() {
-            _isloading = false;
-          });
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => BottomBar()),
-              (Route<dynamic> route) => false);
+
         } else {
           setState(() {
             error = 'Error signing in!';

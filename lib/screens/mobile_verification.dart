@@ -270,7 +270,7 @@ class _MobileVerficationState extends State<MobileVerfication> {
                                Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginScreen()),
+                                    builder: (context) => LoginScreen(Role:widget.role)),
                               );
                             },
                           )
