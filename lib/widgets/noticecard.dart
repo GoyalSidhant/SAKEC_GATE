@@ -42,17 +42,41 @@ class _NoticeCardState extends State<NoticeCard> {
                 widget.undersigned,
                 overflow: TextOverflow.fade,
               )),
-          RaisedButton(
-            child: Text("Read More"),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => NoticeDialog(
-                        title: widget.title,
-                        description: widget.content,
-                        undersigned: widget.undersigned,
-                      ));
-            },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              RaisedButton(
+                child: Text("Read More"),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => NoticeDialog(
+                            title: widget.title,
+                            description: widget.content,
+                            undersigned: widget.undersigned,
+                          ));
+                },
+              ),
+              RaisedButton(
+                child: Text("Delete"),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                                title: new Text("Delete Notice"),
+                                content: new Text("Notice will be delete soon."),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('ok'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              ));
+                },
+              ),
+            ],
           )
         ],
       ),
