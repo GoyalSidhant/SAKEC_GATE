@@ -37,6 +37,7 @@ class _SecurityListState extends State<SecurityList> {
               staff: visitors[index].staff,
               mediaurl: visitors[index].mediaURL,
               purpose: visitors[index].purpose,
+              staffMobile: visitors[index].staffMobile,
             );
           }):
           Container();
