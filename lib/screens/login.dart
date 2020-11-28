@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:SAKEC_GATE/models/user.dart';
 import 'package:SAKEC_GATE/screens/bottombar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypt/crypt.dart';
 import 'package:flutter/material.dart';
 import 'package:SAKEC_GATE/screens/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isloading = false;
   AuthService _auth = AuthService();
   String error = '';
+
+  Crypt hashing(String pass){
+    final c1 = Crypt.sha256(pass);
+    return c1 ; 
+  }
  
   void _onSignIn() async {
     global.email = email.text;
@@ -33,7 +39,9 @@ class _LoginScreenState extends State<LoginScreen> {
       _isloading = true;
     });
     print(email);
+    Crypt pass = hashing(password.text);
     try {
+      print(pass);
       await _auth
           .signInWithEmailAndPassword(email.text, password.text)
           .then((result) async {
