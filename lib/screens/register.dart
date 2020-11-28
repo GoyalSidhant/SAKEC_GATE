@@ -76,7 +76,7 @@ class _RegisterState extends State<Register> {
         if (result != null) {
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                  builder: (context) => BottomBar()));
+                  builder: (context) => BottomBar(i:1)));
         } else {
           setState(() {
             error = 'Error while registering the user!';
@@ -120,7 +120,8 @@ class _RegisterState extends State<Register> {
                       onChanged: (val){
                         setState(() {
                           fullName=val;
-                          global.name = fullName  ; 
+                          global.name = val;
+                          print(global.name);
                         });
                       },
                       decoration: InputDecoration(

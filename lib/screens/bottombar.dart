@@ -8,6 +8,8 @@ import 'package:SAKEC_GATE/global.dart' as global;
 import 'noticeboard.dart';
 
 class BottomBar extends StatefulWidget {
+  int i;
+  BottomBar({this.i=0});
   @override
   _BottomBarState createState() => _BottomBarState();
 }
@@ -55,8 +57,10 @@ class _BottomBarState extends State<BottomBar> {
     List<UserFirebase> data =
         staffs.where((row) => (row.email.contains(global.email))).toList();
     curruser = data[0];
+    if(widget.i==0){
+      global.name = curruser.fullName;
+    }
 
-    global.name = curruser.fullName;
   }
 
    void getSecDetials() async {
@@ -85,8 +89,9 @@ class _BottomBarState extends State<BottomBar> {
     List<UserFirebase> data =
         users.where((row) => (row.email.contains(global.email))).toList();
     curruser = data[0];
-
-    global.name = curruser.fullName;
+    if(widget.i==0){
+      global.name = curruser.fullName;
+    }
     log(global.staff.toString());
   }
 
