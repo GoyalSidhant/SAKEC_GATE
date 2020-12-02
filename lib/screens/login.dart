@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       print(pass);
       await _auth
-          .signInWithEmailAndPassword(email.text, password.text)
+          .signInWithEmailAndPassword(email.text, password.text) // for hashing just replace by pass 
           .then((result) async {
         if (result != null) {
           print(widget.Role);
