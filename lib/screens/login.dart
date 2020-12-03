@@ -151,6 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: MediaQuery.of(context).size.width / 1.2,
                       child: TextFormField(
                         controller: password,
+                        obscureText: true,
                         decoration: new InputDecoration(
                           labelText: "Password",
                           contentPadding: EdgeInsets.all(8),
