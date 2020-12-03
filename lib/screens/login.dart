@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:SAKEC_GATE/widgets/auth_service.dart';
 import 'package:SAKEC_GATE/global.dart' as global;
 import 'package:SAKEC_GATE/widgets/Database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   String Role;
@@ -28,12 +29,18 @@ class _LoginScreenState extends State<LoginScreen> {
   AuthService _auth = AuthService();
   String error = '';
 
-  Crypt hashing(String pass){
+  Crypt hashing(String pass) {
     final c1 = Crypt.sha256(pass);
-    return c1 ; 
+    return c1;
   }
- 
+
   void _onSignIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('email', email.text);
+    prefs.setString('password', password.text);
+    prefs.setString('login', '1');
+    prefs.setString('role', global.role);
+
     global.email = email.text;
     setState(() {
       _isloading = true;
@@ -43,52 +50,35 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       print(pass);
       await _auth
-          .signInWithEmailAndPassword(email.text, password.text) // for hashing just replace by pass 
+          .signInWithEmailAndPassword(
+              email.text, password.text) // for hashing just replace by pass
           .then((result) async {
         if (result != null) {
           print(widget.Role);
-          try{QuerySnapshot userInfoSnapshot = await DatabaseService().getUserData(email.text,widget.Role);
-          print('USER INF');
-          print(userInfoSnapshot.documents);
-          if(userInfoSnapshot.documents.length==0){
+          try {
+            QuerySnapshot userInfoSnapshot =
+                await DatabaseService().getUserData(email.text, widget.Role);
+            print('USER INF');
+            print(userInfoSnapshot.documents);
+            if (userInfoSnapshot.documents.length == 0) {
+              setState(() {
+                error = 'Error signing in!';
+                _isloading = false;
+              });
+            } else {
+              setState(() {
+                _isloading = false;
+              });
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => BottomBar()),
+                  (Route<dynamic> route) => false);
+            }
+          } catch (e) {
             setState(() {
               error = 'Error signing in!';
               _isloading = false;
             });
           }
-          else{
-          setState(() {
-            _isloading = false;
-          });
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => BottomBar()),
-                  (Route<dynamic> route) => false);}}
-          catch(e){
-            setState(() {
-              error = 'Error signing in!';
-              _isloading = false;
-            });
-          }
-          //print("USER INFO");
-          //print(userInfoSnapshot.documents[0].data);
-
-          // await HelperFunctions.saveUserLoggedInSharedPreference(true);
-          // await HelperFunctions.saveUserEmailSharedPreference(email.text);
-          // await HelperFunctions.saveUserNameSharedPreference(
-          //     userInfoSnapshot.documents[0].data['fullName']
-          // );
-          //
-          // print("Signed In");
-          // await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
-          //   print("Logged in: $value");
-          // });
-          // await HelperFunctions.getUserEmailSharedPreference().then((value) {
-          //   print("Email: $value");
-          // });
-          // await HelperFunctions.getUserNameSharedPreference().then((value) {
-          //   print("Full Name: $value");
-          // });
-
         } else {
           setState(() {
             error = 'Error signing in!';
