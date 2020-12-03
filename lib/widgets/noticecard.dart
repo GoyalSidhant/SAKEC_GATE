@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:SAKEC_GATE/widgets/noticeDialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:SAKEC_GATE/global.dart' as global;
 
 class NoticeCard extends StatefulWidget {
   final String content;
@@ -10,13 +13,17 @@ class NoticeCard extends StatefulWidget {
 
   final String undersigned;
 
-  NoticeCard({this.content, this.title, this.time, this.undersigned});
+  final String id;
+
+  NoticeCard({this.content, this.title, this.time, this.undersigned, this.id});
 
   @override
   _NoticeCardState createState() => _NoticeCardState();
 }
 
 class _NoticeCardState extends State<NoticeCard> {
+  CollectionReference noticeCollection =
+      Firestore.instance.collection('notice');
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -57,25 +64,30 @@ class _NoticeCardState extends State<NoticeCard> {
                           ));
                 },
               ),
-              RaisedButton(
-                child: Text("Delete"),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                                title: new Text("Delete Notice"),
-                                content: new Text("Notice will be delete soon."),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text('ok'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  )
-                                ],
-                              ));
-                },
-              ),
+              global.role == "staff"
+                  ? RaisedButton(
+                      child: Text("Delete"),
+                      onPressed: () {
+                        noticeCollection.document(widget.id).delete(); 
+                        log("Deleted");
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                                  title: new Text("Delete Notice"),
+                                  content:
+                                      new Text("Notice will be delete soon."),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('ok'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                ));
+                      },
+                    )
+                  : SizedBox(width: 0),
             ],
           )
         ],

@@ -9,16 +9,21 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
+          Container(
             child: Column(
               children: [
                 CircleAvatar(
-                    radius: 40,
-                    child: Text(
-                      "SA",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-                    )),
+                  backgroundColor: Colors.blueAccent,
+                  radius: 66.0,
+                  // maxRadius: 66.0,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/logo.png',
+                      height: 100,
+                      width: 100,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 10),
                 Text(
                   "Hello " + global.name + " !",

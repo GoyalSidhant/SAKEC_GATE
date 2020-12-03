@@ -7,7 +7,7 @@ class AboutUs extends StatelessWidget {
       appBar: AppBar(
         title: Text("About US"),
       ),
-      body: Text("About US"),
+      body: Text("About US SAKEC GATE  contact us : mail_id , number  Loaction of sakec"),
       
     );
   }

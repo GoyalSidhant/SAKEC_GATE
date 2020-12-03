@@ -191,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onTap: () {},
                           child: Text(
                             "Forgot Password ? Click Here!",
-                            style: TextStyle(color: Colors.red),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                         SizedBox(

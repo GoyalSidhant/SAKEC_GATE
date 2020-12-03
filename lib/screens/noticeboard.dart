@@ -15,9 +15,10 @@ class _NoticeBoardState extends State<NoticeBoard> {
   List<Notice> notices = [];
   final CollectionReference noticeCollection =
       Firestore.instance.collection('notice');
+      QuerySnapshot snapshot ; 
 
   getNotices() async {
-    QuerySnapshot snapshot = await noticeCollection.getDocuments();
+     snapshot = await noticeCollection.getDocuments();
     print(snapshot.documents[0].data.toString());
     setState(() {
       notices =
@@ -58,6 +59,7 @@ class _NoticeBoardState extends State<NoticeBoard> {
               time: notices[index].timestamp,
               title: notices[index].title,
               undersigned: notices[index].undersigning,
+              id: snapshot.documents[index].documentID 
             );
           }):
           Container(),
