@@ -9,6 +9,9 @@ class Visitor{
   Timestamp timestamp ;
   String visitorID ; 
   String staffMobile ; 
+  String status ; 
+  String id ;
+  
   
 
   Visitor({
@@ -19,7 +22,9 @@ class Visitor{
     this.staff,
     this.timestamp,
     this.visitorID,
-    this.staffMobile
+    this.staffMobile,
+    this.status,
+    this.id, 
   });
 
   factory Visitor.fromDocument(DocumentSnapshot doc){
@@ -31,7 +36,9 @@ class Visitor{
       timestamp : doc['timestamp'],
       mediaURL: doc['mediaURL'],
       visitorID:doc['visitorID'],
-      staffMobile: doc['staffMobile']
+      staffMobile: doc['staffMobile'],
+      status : doc['status'],
+      id: doc['visitorID']
     );
   }
 }

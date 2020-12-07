@@ -17,7 +17,7 @@ class _VistorsState extends State<Vistors> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: global.role == "Security"
+      floatingActionButton: global.role == "security"
           ? FloatingActionButton(
               child: new Icon(Icons.add),
               onPressed: () {

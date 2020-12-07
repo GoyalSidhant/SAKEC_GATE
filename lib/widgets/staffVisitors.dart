@@ -16,8 +16,9 @@ class _StaffvisitorListState extends State<StaffvisitorList> {
       Firestore.instance.collection('visitors');
   List<Visitor> visitors = [];
   List<Visitor> test = [] ; 
+  QuerySnapshot snapshot ; 
    void getVisitor() async {
-    QuerySnapshot snapshot = await visitorCollection.getDocuments();
+     snapshot = await visitorCollection.getDocuments();
     print(snapshot.documents[0].data.toString());
     setState(() {
       test =
@@ -47,6 +48,8 @@ class _StaffvisitorListState extends State<StaffvisitorList> {
                 staff: visitors[index].staff,
                 mediaurl: visitors[index].mediaURL,
                 purpose: visitors[index].purpose,
+                id: visitors[index].id  ,
+                status: visitors[index].status
               );
             })
         : Container();

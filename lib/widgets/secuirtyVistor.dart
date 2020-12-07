@@ -11,8 +11,9 @@ class SecurityList extends StatefulWidget {
 class _SecurityListState extends State<SecurityList> {
   final CollectionReference visitorCollection = Firestore.instance.collection('visitors');
    List<Visitor> visitors = []; 
+   QuerySnapshot snapshot;
    getVisitor() async {
-    QuerySnapshot snapshot = await visitorCollection.getDocuments();
+     snapshot = await visitorCollection.getDocuments();
     print(snapshot.documents[0].data.toString());
     setState(() {
       visitors =
@@ -38,6 +39,8 @@ class _SecurityListState extends State<SecurityList> {
               mediaurl: visitors[index].mediaURL,
               purpose: visitors[index].purpose,
               staffMobile: visitors[index].staffMobile,
+              id: visitors[index].id ,
+              status : visitors[index].status
             );
           }):
           Container();

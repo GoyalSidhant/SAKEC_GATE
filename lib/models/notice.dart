@@ -11,7 +11,8 @@ class Notice{
     this.content,
     this.title,
     this.timestamp,
-    this.undersigning
+    this.undersigning,
+    this.noticeID
   }) ; 
 
   factory Notice.fromDocument(DocumentSnapshot doc){
@@ -20,6 +21,7 @@ class Notice{
       content : doc['content'],
       undersigning : doc['undersigning'],
       timestamp : doc['timestamp'],
+      noticeID : doc['noticeID']
     );
   }
 }

@@ -142,7 +142,8 @@ class _AddVisitorState extends State<AddVisitor>
       "staff": staff,
       "timestamp": timestamp,
       "ID": ID,
-      "staffMobile": staffMobile
+      "staffMobile": staffMobile,
+      "status" : "start"
     });
   }
 

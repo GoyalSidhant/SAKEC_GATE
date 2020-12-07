@@ -18,7 +18,7 @@ class _NoticeBoardState extends State<NoticeBoard> {
       QuerySnapshot snapshot ; 
 
   getNotices() async {
-     snapshot = await noticeCollection.getDocuments();
+     snapshot = await noticeCollection.orderBy("timestamp", descending: true).getDocuments();
     print(snapshot.documents[0].data.toString());
     setState(() {
       notices =
@@ -59,7 +59,7 @@ class _NoticeBoardState extends State<NoticeBoard> {
               time: notices[index].timestamp,
               title: notices[index].title,
               undersigned: notices[index].undersigning,
-              id: snapshot.documents[index].documentID 
+              id: notices[index].noticeID 
             );
           }):
           Container(),

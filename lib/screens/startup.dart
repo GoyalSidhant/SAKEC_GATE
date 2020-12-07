@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:SAKEC_GATE/screens/bottombar.dart';
 import 'package:SAKEC_GATE/widgets/Database.dart';
 import 'package:SAKEC_GATE/widgets/auth_service.dart';
@@ -66,12 +68,15 @@ class _StartupScreenState extends State<StartupScreen> {
   void autoLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String login = prefs.getString('login');
+    log(login); 
     
     if (login == '1') {
       
       String email = prefs.getString('email');
       String password = prefs.getString('password');
       global.role = prefs.getString('role');
+      log(email); 
+      log(global.role);
       _onSignIn(email,password, global.role) ;
     } else {
       Future.delayed(const Duration(seconds: 1), () {

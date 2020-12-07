@@ -71,7 +71,7 @@ class LoginOption extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0),
                     side: BorderSide(color: Colors.white)),
                 onPressed: () {
-                  global.role = "Security";
+                  global.role = "security";
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

@@ -155,8 +155,10 @@ class _RegisterState extends State<Register> {
                           email=val;
                         });
                       },
+                      
                       decoration: InputDecoration(
                         labelText: "Email",
+                        
                         contentPadding: EdgeInsets.all(8),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
@@ -205,8 +207,19 @@ class _RegisterState extends State<Register> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      validator: (val) =>
-                          val.length < 6 ? 'Password not strong enough' : null,
+                      validator: (val) {
+                      if (val.isEmpty) {
+                        return "Please Re-Enter New Password";
+
+                      } else if (val.length < 6) {
+                        return "Password must be atleast 6 characters long";
+                      } else if (val != password) {
+                        return "Password must be same as above";
+                      } else {
+                        return null;
+                      }
+
+                    }, 
                       obscureText: true,
                     ),
                     SizedBox(height: 20.0),

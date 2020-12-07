@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:SAKEC_GATE/models/visitor.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:SAKEC_GATE/global.dart' as global;
 import 'package:url_launcher/url_launcher.dart';
@@ -9,16 +12,22 @@ class VistorCard extends StatefulWidget {
   final String mediaurl;
   final String purpose;
   final String staffMobile;
+  final String id ; 
+  final String status ; 
   VistorCard(
-      {this.name, this.staff, this.mediaurl, this.purpose, this.staffMobile});
+      {this.name, this.staff, this.mediaurl, this.purpose, this.staffMobile, this.id , this.status} );
   @override
   _VistorCardState createState() => _VistorCardState();
 }
 
 class _VistorCardState extends State<VistorCard> {
+
+   CollectionReference visitorCollection =
+      Firestore.instance.collection('visitors');
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: widget.status != "start" ? Colors.orange : Colors.white,
       elevation: 20,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -78,7 +87,10 @@ class _VistorCardState extends State<VistorCard> {
                                 actions: <Widget>[
                                   FlatButton(
                                     child: Text('ok'),
-                                    onPressed: () {
+                                    onPressed: () async  {
+                                       await visitorCollection.document(widget.id).updateData(<String,dynamic>{'status' : "done"});
+                                      log("updated data");
+                                      log(widget.id);
                                       Navigator.of(context).pop();
                                     },
                                   )
