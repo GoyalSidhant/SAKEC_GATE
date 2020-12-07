@@ -18,7 +18,7 @@ class _StaffvisitorListState extends State<StaffvisitorList> {
   List<Visitor> test = [] ; 
   QuerySnapshot snapshot ; 
    void getVisitor() async {
-     snapshot = await visitorCollection.getDocuments();
+     snapshot = await visitorCollection.orderBy("timestamp", descending: true).getDocuments();
     print(snapshot.documents[0].data.toString());
     setState(() {
       test =
